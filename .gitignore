@@ -1,1 +1,5 @@
 .idea
+mysqL_data
+.env
+.env.dev.example
+.env.prod.example
