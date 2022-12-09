@@ -1,0 +1,21 @@
+branding:
+  title: Crew
+  logoAlign: left
+  label: Docs
+
+editor:
+  enabled: true
+
+generator:
+  recase: none
+
+markdown:
+  lineBreaks: soft # Switches between `soft` and `hard` line break modes.
+
+server:
+  host: 127.0.0.1
+  port: 5005
+  watch:
+    mode: memory
+    polling: true
+    validation: optimal

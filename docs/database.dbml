@@ -1,0 +1,168 @@
+Project Crew {
+  database_type: 'MySQL'
+}
+
+Table  users [note: "Users who use you app"] {
+  id int [unique, increment]
+  name varchar(25) [note: 'Manually typed name (ex. Vladislav)']
+  joined_at datetime [note: 'When user was created account']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table third_apps [note: 'Apps providing opportunity for management our application by user'] {
+  id int  [unique, increment]
+  app_name varchar(25) [note: 'The following app name (ex. Telegram)']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table third_apps_user_data [
+note: 'Data of users from third apps.
+Don\'t store tokens or other sensetive info. Use secrets  etc.'
+] {
+  id int [unique, increment]
+  id_user int [note: 'FK. Id of user who own the data']
+  id_app int [note: 'FK. App id which belongs to the data']
+  field varchar(25) [note: "ex. chat_id"]
+  value varchar(100) [note: "ex. 1234490"]
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table money_collections [note: 'Created collection by someone for split shared bill'] {
+  id int [unique, increment]
+  name varchar(25) [note: 'Name of the collection. ex. Brother birthday']
+  id_members_list int [note: 'FK']
+  id_items_list int [note: 'FK']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table collection_members_list [note: 'List of members who joined to the collection. Bill will splited between these people\'s'] {
+  id int [unique, increment]
+  id_list int
+  id_user int [note: 'FK']
+  id_permissions_list int [note: 'FK']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table collection_member_permissions_list [note: 'List of allowed actions for member in the collection'] {
+  id int [unique, increment]
+  id_list int
+  id_collection int [note: 'FK']
+  id_user int [note: 'FK']
+  id_permission int
+  is_allowed bool [default: false, note: 'True: this action is allowed for this user']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table member_permission [note: 'Description of the permission'] {
+  id int [unique, increment]
+  name varchar(25) [note: 'View collection, invite new members..']
+
+  Indexes {
+    id [pk]
+  }
+}
+
+Table collection_items_list [note: 'Something like menu. A list of selected products, purchases, etc.'] {
+  id int [unique, increment]
+  id_list int
+  id_item int [note: 'FK']
+  id_votes_list int [note: 'FK']
+  items_count int [default: 1, note: 'How many items including in the list']
+  is_approved_item bool [default: false, note: 'After add item in list, and review votes, you need to (un)approve the item']
+}
+
+Table collection_item {
+  id int [unique, increment]
+  name varchar(50) [note: 'Manually typed product name. ex. Chocolate, Coca-cola etc..']
+  price decimal(10,2) [note: 'How much cost this item in the store']
+}
+
+Table collection_item_votes_list [
+  note: 'After adding new item in
+  the collection, members can vote for this item.
+  it\'s need item or not'
+] {
+  id int [unique, increment]
+  id_list int [note: 'FK. Id of the list']
+  id_user int [note: 'FK. User which voted']
+  is_liked bool [default: false, note: 'Liked user item or not']
+}
+
+Table collection_invoices [note: 'Created invoices for pay for collection by user'] {
+  id int [unique, increment]
+  id_user int [note: 'FK']
+  id_collection int
+  id_status int [note: 'FK']
+  id_payment_method int [note: 'FK']
+  id_items_list int [note: 'FK']
+}
+
+Table invoice_statuses [note: 'List of invoice statuses'] {
+  id int [unique, increment]
+  name string [note: 'wait payment, etc.']
+}
+
+Table invoice_items_list {
+  id int [unique, increment]
+  id_list int
+  id_item int
+  price decimal
+  count int
+}
+
+Table user_payment_methods [note: 'IBAN, card numbers, etc..'] {
+  id int [unique, increment]
+  id_user int [note: 'FK']
+  id_method int [note: 'FK']
+  value string [note: 'BLBBYX... or something']
+}
+
+Table payment_methods [note: 'List of methods  for pay for something. For example: IBAN and etc'] {
+  id int [unique, increment]
+  name string [note: 'IBAN']
+}
+
+// refs: --------------
+Ref: third_apps_user_data.id_user > users.id
+Ref: third_apps_user_data.id_app > third_apps.id
+
+Ref: money_collections.id_members_list < collection_members_list.id_list
+Ref: money_collections.id_items_list < collection_items_list.id_list
+
+Ref: collection_members_list.id_user <> users.id
+Ref: collection_members_list.id_permissions_list <> collection_member_permissions_list.id_list
+
+Ref: collection_member_permissions_list.id_collection > money_collections.id
+Ref: collection_member_permissions_list.id_user <> users.id
+Ref: collection_member_permissions_list.id_permission - member_permission.id
+
+Ref: collection_items_list.id_item - collection_item.id
+
+Ref: collection_item_votes_list.id_list > collection_items_list.id_votes_list
+Ref: collection_item_votes_list.id_user > users.id
+
+Ref: collection_invoices.id_user > users.id
+Ref: collection_invoices.id_status - invoice_statuses.id
+Ref: collection_invoices.id_payment_method - payment_methods.id
+Ref: collection_invoices.id_items_list < invoice_items_list.id_list
+
+Ref: user_payment_methods.id_user > users.id
+Ref: user_payment_methods.id_method - payment_methods.id
