@@ -11,9 +11,14 @@ services:
         target: /etc/nginx/nginx.conf
         read_only: true
       - ${NGINX_LOGS_FOLDER}:/var/log/nginx
-      - ./test_html:/var/www/html
+    volumes_from:
+      - backend_volumes
   php:
     image: php:8.1-fpm-alpine3.15
+    volumes_from:
+      - backend_volumes
+  backend_volumes:
+    image: busybox
     volumes:
       - ${CODE_FOLDER}:/var/www/html
   maria_db:

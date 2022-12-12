@@ -1,5 +1,4 @@
 .idea
 mysqL_data
 .env
-.env.*.example
 logs
