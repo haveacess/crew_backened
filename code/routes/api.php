@@ -18,6 +18,6 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-Route::get('/devil', function () {
-    return 'Hello wrold';
+Route::get('/devil', function (Request $request) {
+    return sprintf('Hello world. My name is: %s', $request->get('name'));
 });

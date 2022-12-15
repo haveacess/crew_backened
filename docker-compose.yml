@@ -11,6 +11,7 @@ services:
         target: /etc/nginx/nginx.conf
         read_only: true
       - ${NGINX_LOGS_FOLDER}:/var/log/nginx
+      - ${NGINX_STATIC_FILES_FOLDER}:/var/www/static
     volumes_from:
       - backend_volumes
   php:
