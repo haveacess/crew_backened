@@ -18,6 +18,13 @@ services:
     image: php:8.1-fpm-alpine3.15
     volumes_from:
       - backend_volumes
+    environment:
+      - APP_NAME=${LARAVEL_APP_NAME}
+      - APP_ENV=${LARAVEL_APP_ENV}
+      - APP_KEY=${LARAVEL_APP_KEY}
+      - APP_DEBUG=${LARAVEL_APP_DEBUG}
+      - LOG_CHANNEL=${LARAVEL_LOG_CHANNEL}
+      - TEST_CONFIG_VALUE=${LARAVEL_TEST_CONFIG_VALUE}
   backend_volumes:
     image: busybox
     volumes:

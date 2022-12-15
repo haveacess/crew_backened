@@ -212,4 +212,5 @@ return [
         // 'ExampleClass' => App\Example\ExampleClass::class,
     ])->toArray(),
 
+    'test_config_value' => env('TEST_CONFIG_VALUE', 'not_found')
 ];
