@@ -6,4 +6,4 @@ For watch docs: </br>
 ``cd docs`` </br>
 ``retype watch``
 
-After adding docker looking instruction here. We meet soon.
+Open retype documentation and go to into **How to start** section
