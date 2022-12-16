@@ -24,7 +24,6 @@ services:
       - APP_KEY=${LARAVEL_APP_KEY}
       - APP_DEBUG=${LARAVEL_APP_DEBUG}
       - LOG_CHANNEL=${LARAVEL_LOG_CHANNEL}
-      - TEST_CONFIG_VALUE=${LARAVEL_TEST_CONFIG_VALUE}
   backend_volumes:
     image: busybox
     volumes:
