@@ -1,0 +1,42 @@
+version: '3.4'
+
+services:
+  nginx:
+    image: nginx:1.23
+    ports:
+      - ${NGINX_PORT}:80
+    volumes:
+      - type: bind
+        source: ${NGINX_CONF}
+        target: /etc/nginx/nginx.conf
+        read_only: true
+      - ${NGINX_LOGS_FOLDER}:/var/log/nginx
+      - ${NGINX_STATIC_FILES_FOLDER}:/var/www/static
+    volumes_from:
+      - backend_volumes
+  php:
+    image: php:8.1-fpm-alpine3.15
+    volumes_from:
+      - backend_volumes
+    environment:
+      - APP_NAME=${LARAVEL_APP_NAME}
+      - APP_ENV=${LARAVEL_APP_ENV}
+      - APP_KEY=${LARAVEL_APP_KEY}
+      - APP_DEBUG=${LARAVEL_APP_DEBUG}
+      - LOG_CHANNEL=${LARAVEL_LOG_CHANNEL}
+  backend_volumes:
+    image: busybox
+    volumes:
+      - ${CODE_FOLDER}:/var/www/html
+  maria_db:
+    image: mariadb:10.3
+    restart: on-failure
+    ports:
+      - ${MARIADB_PORT}:3306
+    volumes:
+      - ./mysqL_data:/var/lib/mysql
+    environment:
+      MARIADB_DATABASE: ${MARIADB_DATABASE}
+      MARIADB_ROOT_PASSWORD: ${MARIADB_ROOT_PASSWORD}
+      MARIADB_USER: ${MARIADB_USER}
+      MARIADB_PASSWORD: ${MARIADB_PASSWORD}

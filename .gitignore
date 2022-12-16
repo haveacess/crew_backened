@@ -1,1 +1,4 @@
 .idea
+mysqL_data
+.env
+logs
