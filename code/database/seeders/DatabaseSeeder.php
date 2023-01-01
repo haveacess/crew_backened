@@ -19,7 +19,8 @@ class DatabaseSeeder extends Seeder
             ThirdAppsDataSeeder::class,
             MemberPermissionsSeeder::class,
             MoneyCollectionsSeeder::class,
-            CollectionMembersSeeder::class
+            CollectionMembersSeeder::class,
+            CollectionItemsSeeder::class
         ]);
     }
 }

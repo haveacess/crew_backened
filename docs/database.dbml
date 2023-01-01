@@ -106,6 +106,8 @@ Table collection_item_votes_list [
   is_liked bool [default: false, note: 'Liked user item or not']
 }
 
+--all-database-structure-created-before-that-moment----
+
 Table collection_invoices [note: 'Created invoices for pay for collection by user'] {
   id int [unique, increment]
   id_user int [note: 'FK']
