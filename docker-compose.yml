@@ -24,6 +24,10 @@ services:
       - APP_KEY=${LARAVEL_APP_KEY}
       - APP_DEBUG=${LARAVEL_APP_DEBUG}
       - LOG_CHANNEL=${LARAVEL_LOG_CHANNEL}
+      - MARIADB_PORT
+      - MARIADB_DATABASE
+      - MARIADB_USER
+      - MARIADB_PASSWORD
   backend_volumes:
     image: busybox
     volumes:
